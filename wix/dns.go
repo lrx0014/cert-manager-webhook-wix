@@ -6,7 +6,7 @@ import (
 	"github.com/miekg/dns"
 )
 
-func (e *exampleSolver) handleDNSRequest(w dns.ResponseWriter, req *dns.Msg) {
+func (e *wixSolver) handleDNSRequest(w dns.ResponseWriter, req *dns.Msg) {
 	msg := new(dns.Msg)
 	msg.SetReply(req)
 	switch req.Opcode {
@@ -21,7 +21,7 @@ func (e *exampleSolver) handleDNSRequest(w dns.ResponseWriter, req *dns.Msg) {
 	w.WriteMsg(msg)
 }
 
-func (e *exampleSolver) addDNSAnswer(q dns.Question, msg *dns.Msg, req *dns.Msg) error {
+func (e *wixSolver) addDNSAnswer(q dns.Question, msg *dns.Msg, req *dns.Msg) error {
 	switch q.Qtype {
 	// Always return loopback for any A query
 	case dns.TypeA:

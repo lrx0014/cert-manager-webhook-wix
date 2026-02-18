@@ -10,14 +10,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestExampleSolver_Name(t *testing.T) {
+func TestwixSolver_Name(t *testing.T) {
 	port, _ := rand.Int(rand.Reader, big.NewInt(50000))
 	port = port.Add(port, big.NewInt(15534))
 	solver := New(port.String())
 	assert.Equal(t, "example", solver.Name())
 }
 
-func TestExampleSolver_Initialize(t *testing.T) {
+func TestwixSolver_Initialize(t *testing.T) {
 	port, _ := rand.Int(rand.Reader, big.NewInt(50000))
 	port = port.Add(port, big.NewInt(15534))
 	solver := New(port.String())
@@ -27,7 +27,7 @@ func TestExampleSolver_Initialize(t *testing.T) {
 	close(done)
 }
 
-func TestExampleSolver_Present_Cleanup(t *testing.T) {
+func TestwixSolver_Present_Cleanup(t *testing.T) {
 	port, _ := rand.Int(rand.Reader, big.NewInt(50000))
 	port = port.Add(port, big.NewInt(15534))
 	solver := New(port.String())
