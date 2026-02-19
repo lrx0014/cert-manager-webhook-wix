@@ -17,12 +17,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestwixSolver_Name(t *testing.T) {
+func TestWixSolver_Name(t *testing.T) {
 	solver := New("")
 	assert.Equal(t, "wix", solver.Name())
 }
 
-func TestwixSolver_Initialize(t *testing.T) {
+func TestWixSolver_Initialize(t *testing.T) {
 	solver := New("")
 	done := make(chan struct{})
 	err := solver.Initialize(nil, done)
@@ -30,7 +30,7 @@ func TestwixSolver_Initialize(t *testing.T) {
 	close(done)
 }
 
-func TestwixSolver_Present_Cleanup(t *testing.T) {
+func TestWixSolver_Present_Cleanup(t *testing.T) {
 	type capturedRequest struct {
 		method  string
 		path    string
@@ -111,7 +111,7 @@ func TestwixSolver_Present_Cleanup(t *testing.T) {
 	assert.Empty(t, presentReq.body.Deletions)
 	assert.Equal(t, "example.com", presentReq.body.DomainName)
 	assert.Equal(t, DNSRecordChange{
-		Values:   "txt-token",
+		Values:   []string{"txt-token"},
 		Type:     "TXT",
 		HostName: "_acme-challenge.example.com",
 		TTL:      120,
@@ -125,7 +125,7 @@ func TestwixSolver_Present_Cleanup(t *testing.T) {
 	assert.Empty(t, cleanupReq.body.Additions)
 	assert.Equal(t, "example.com", cleanupReq.body.DomainName)
 	assert.Equal(t, DNSRecordChange{
-		Values:   "txt-token",
+		Values:   []string{"txt-token"},
 		Type:     "TXT",
 		HostName: "_acme-challenge.example.com",
 		TTL:      120,
