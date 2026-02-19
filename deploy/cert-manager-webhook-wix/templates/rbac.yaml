@@ -89,3 +89,42 @@ subjects:
     kind: ServiceAccount
     name: {{ .Values.certManager.serviceAccountName }}
     namespace: {{ .Values.certManager.namespace }}
+---
+# Allow the webhook to read credential Secrets
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "cert-manager-webhook-wix.fullname" . }}:secret-reader
+  namespace: {{ .Values.certManager.namespace | quote }}
+  labels:
+    app: {{ include "cert-manager-webhook-wix.name" . }}
+    chart: {{ include "cert-manager-webhook-wix.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "cert-manager-webhook-wix.fullname" . }}:secret-reader
+  namespace: {{ .Values.certManager.namespace | quote }}
+  labels:
+    app: {{ include "cert-manager-webhook-wix.name" . }}
+    chart: {{ include "cert-manager-webhook-wix.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "cert-manager-webhook-wix.fullname" . }}:secret-reader
+subjects:
+  - apiGroup: ""
+    kind: ServiceAccount
+    name: {{ include "cert-manager-webhook-wix.fullname" . }}
+    namespace: {{ .Release.Namespace }}
