@@ -11,7 +11,7 @@ on:
       - 'pre*'
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -54,3 +54,18 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
+
+      - name: Update release notes with image info
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          append_body: true
+          body: |
+            ## Container Image
+            - Image: `ghcr.io/${{ github.repository }}`
+            - Tag: `${{ github.ref_name }}`
+            - Pull:
+              ```bash
+              docker pull ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+              ```
