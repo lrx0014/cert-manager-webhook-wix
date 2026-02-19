@@ -208,6 +208,10 @@ func (e *wixSolver) challengeTXTTarget(ch *acme.ChallengeRequest) (zone string, 
 	return zone, hostName, nil
 }
 
-func New(_ string) webhook.Solver {
-	return &wixSolver{name: "wix"}
+func New(name string) webhook.Solver {
+	if name == "" {
+		// by default
+		name = "wix"
+	}
+	return &wixSolver{name: name}
 }

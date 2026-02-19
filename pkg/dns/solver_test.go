@@ -18,12 +18,12 @@ import (
 )
 
 func TestWixSolver_Name(t *testing.T) {
-	solver := New("")
+	solver := New("wix")
 	assert.Equal(t, "wix", solver.Name())
 }
 
 func TestWixSolver_Initialize(t *testing.T) {
-	solver := New("")
+	solver := New("wix")
 	done := make(chan struct{})
 	err := solver.Initialize(nil, done)
 	assert.NoError(t, err, "Expected Initialize not to error")
@@ -71,7 +71,7 @@ func TestWixSolver_Present_Cleanup(t *testing.T) {
 	}`)
 	cfg := &extapi.JSON{Raw: rawCfg}
 
-	solver := New("").(*wixSolver)
+	solver := New("wix").(*wixSolver)
 	solver.client = fake.NewSimpleClientset(&corev1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "wix-api",
