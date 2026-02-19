@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	dnssolver "gitgub.com/lrx0014/cert-manager-webhook-wix/pkg/dns"
+	dnssolver "github.com/lrx0014/cert-manager-webhook-wix/pkg/dns"
 	"github.com/stretchr/testify/assert"
 )
 

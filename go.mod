@@ -1,4 +1,4 @@
-module gitgub.com/lrx0014/cert-manager-webhook-wix
+module github.com/lrx0014/cert-manager-webhook-wix
 
 go 1.25.0
 

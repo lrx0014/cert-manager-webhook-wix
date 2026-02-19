@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	dnssolver "gitgub.com/lrx0014/cert-manager-webhook-wix/pkg/dns"
+	dnssolver "github.com/lrx0014/cert-manager-webhook-wix/pkg/dns"
 	"github.com/cert-manager/cert-manager/pkg/acme/webhook/cmd"
 )
 
