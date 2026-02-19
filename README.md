@@ -150,6 +150,5 @@ To compile and publish new Helm chart version:
 
 ```shell
 helm package deploy/cert-manager-webhook-wix
-git checkout gh-pages
 helm repo index . --url https://lrx0014.github.io/cert-manager-webhook-wix/
 ```
