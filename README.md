@@ -112,6 +112,8 @@ spec:
   commonName: example.com
   dnsNames:
     - example.com
+  privateKey:
+    rotationPolicy: Never
   issuerRef:
     name: wix-letsencrypt-staging
     kind: ClusterIssuer

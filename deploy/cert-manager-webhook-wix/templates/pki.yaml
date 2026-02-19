@@ -29,6 +29,8 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   secretName: {{ include "cert-manager-webhook-wix.rootCACertificate" . }}
+  privateKey:
+    rotationPolicy: Never
   duration: 43800h # 5y
   issuerRef:
     name: {{ include "cert-manager-webhook-wix.selfSignedIssuer" . }}
@@ -67,6 +69,8 @@ metadata:
     heritage: {{ .Release.Service }}
 spec:
   secretName: {{ include "cert-manager-webhook-wix.servingCertificate" . }}
+  privateKey:
+    rotationPolicy: Never
   duration: 8760h # 1y
   issuerRef:
     name: {{ include "cert-manager-webhook-wix.rootCAIssuer" . }}
