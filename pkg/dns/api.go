@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"k8s.io/klog/v2"
 )
 
 const defaultWixAPIBaseURL = "https://www.wixapis.com"
@@ -107,15 +109,36 @@ func (c *Client) PatchDNSZone(ctx context.Context, domainName string, additions,
 	req.Header.Set("wix-account-id", c.accountID)
 	req.Header.Set("Authorization", c.authHeader)
 
+	klog.V(4).InfoS(
+		"Wix API request",
+		"method", req.Method,
+		"url", req.URL.String(),
+		"params", req.URL.RawQuery,
+		"body", string(body),
+	)
+
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("wix patch dns zone request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
+	respBody, err := io.ReadAll(io.LimitReader(resp.Body, 4096))
+	if err != nil {
+		return fmt.Errorf("read wix patch dns zone response: %w", err)
+	}
+	respBodyText := strings.TrimSpace(string(respBody))
+
+	klog.V(4).InfoS(
+		"Wix API response",
+		"method", req.Method,
+		"url", req.URL.String(),
+		"statusCode", resp.StatusCode,
+		"body", respBodyText,
+	)
+
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		msg, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
-		msgText := strings.TrimSpace(string(msg))
+		msgText := respBodyText
 		if msgText == "" {
 			msgText = http.StatusText(resp.StatusCode)
 		}

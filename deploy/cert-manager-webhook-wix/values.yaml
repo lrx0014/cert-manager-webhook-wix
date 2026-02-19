@@ -9,6 +9,7 @@
 # inform cert-manager of where to send ChallengePayload resources in order to
 # solve the DNS01 challenge.
 groupName: wix.cert-manager-webhook.lrx0014.github.com
+logLevel: INFO
 
 replicaCount: 1
 

@@ -32,6 +32,13 @@ helm install --namespace cert-manager cert-manager-webhook-wix cert-manager-webh
 helm install --namespace cert-manager cert-manager-webhook-wix deploy/cert-manager-webhook-wix
 ```
 
+enable DEBUG level logs:
+
+```bash
+helm install --namespace cert-manager cert-manager-webhook-wix deploy/cert-manager-webhook-wix \
+  --set logLevel=DEBUG
+```
+
 **Note**: The kubernetes resources used to install the Webhook should be deployed within the same namespace as the cert-manager.
 
 To uninstall the webhook:
