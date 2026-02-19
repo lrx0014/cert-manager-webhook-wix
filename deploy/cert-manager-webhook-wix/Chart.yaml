@@ -1,0 +1,20 @@
+apiVersion: v1
+appVersion: "1.0"
+description: Allow cert-manager to solve DNS challenges using Wix DNS API
+name: cert-manager-webhook-wix
+version: 0.0.1
+home: https://github.com/lrx0014/cert-manager-webhook-wix
+icon: https://raw.githubusercontent.com/cert-manager/cert-manager/master/logo/logo-small.png
+keywords:
+  - cert-manager
+  - wix
+  - kube-lego
+  - letsencrypt
+  - tls
+sources:
+  - https://github.com/lrx0014/cert-manager-webhook-wix
+maintainers:
+  - name: github.com/lrx0014
+    email: lrx0014@hotmail.com
+annotations:
+  artifacthub.io/license: Apache-2.0
