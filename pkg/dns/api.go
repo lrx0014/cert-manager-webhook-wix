@@ -1,4 +1,4 @@
-package wix
+package dns
 
 import (
 	"bytes"
@@ -150,4 +150,3 @@ func (c *Client) DeleteTXTRecord(ctx context.Context, zone, hostName, value stri
 func normalizeDNSName(s string) string {
 	return strings.TrimSuffix(strings.TrimSpace(s), ".")
 }
-

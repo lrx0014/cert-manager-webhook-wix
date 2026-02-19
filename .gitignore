@@ -30,3 +30,9 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# local shell artifacts
+.bash_history
+.bashrc
+.viminfo
+.wget-hsts

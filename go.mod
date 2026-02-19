@@ -1,12 +1,13 @@
-module github.com/cert-manager/webhook-example
+module gitgub.com/lrx0014/cert-manager-webhook-wix
 
 go 1.25.0
 
 require (
 	github.com/cert-manager/cert-manager v1.19.3
-	github.com/miekg/dns v1.1.72
 	github.com/stretchr/testify v1.11.1
+	k8s.io/api v0.35.1
 	k8s.io/apiextensions-apiserver v0.35.1
+	k8s.io/apimachinery v0.35.1
 	k8s.io/client-go v0.35.1
 )
 
@@ -78,7 +79,6 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/crypto v0.46.0 // indirect
 	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
-	golang.org/x/mod v0.31.0 // indirect
 	golang.org/x/net v0.48.0 // indirect
 	golang.org/x/oauth2 v0.31.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
@@ -96,8 +96,6 @@ require (
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	k8s.io/api v0.35.1 // indirect
-	k8s.io/apimachinery v0.35.1 // indirect
 	k8s.io/apiserver v0.35.1 // indirect
 	k8s.io/component-base v0.35.1 // indirect
 	k8s.io/klog/v2 v2.130.1 // indirect
