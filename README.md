@@ -138,9 +138,13 @@ You can then run the test suite with:
 
 ## Creating new package
 
-To build new Docker image and push it to gfcr.io, here is a github action manifest:
+To build new Docker image and push it to ghcr.io, here is a github action manifest:
 
 - [.github/workflows/docker-publish.yml](.github/workflows/docker-publish.yml)
+
+and you can find pre-build images in releases page of this project:
+
+- https://github.com/lrx0014/cert-manager-webhook-wix/releases/
 
 To compile and publish new Helm chart version:
 
