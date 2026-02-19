@@ -16,10 +16,10 @@ const defaultWixAPIBaseURL = "https://www.wixapis.com"
 
 // DNSRecordChange represents one record mutation in Wix DNS PATCH requests.
 type DNSRecordChange struct {
-	Values   string `json:"values"`
-	Type     string `json:"type"`
-	HostName string `json:"hostName"`
-	TTL      int    `json:"ttl,omitempty"`
+	Values   []string `json:"values"`
+	Type     string   `json:"type"`
+	HostName string   `json:"hostName"`
+	TTL      int      `json:"ttl,omitempty"`
 }
 
 type patchDNSZoneRequest struct {
@@ -128,7 +128,7 @@ func (c *Client) PatchDNSZone(ctx context.Context, domainName string, additions,
 // AddTXTRecord adds a TXT record in the given zone.
 func (c *Client) AddTXTRecord(ctx context.Context, zone, hostName, value string, ttl int) error {
 	change := DNSRecordChange{
-		Values:   value,
+		Values:   []string{value},
 		Type:     "TXT",
 		HostName: normalizeDNSName(hostName),
 		TTL:      ttl,
@@ -139,7 +139,7 @@ func (c *Client) AddTXTRecord(ctx context.Context, zone, hostName, value string,
 // DeleteTXTRecord removes one TXT record value in the given zone.
 func (c *Client) DeleteTXTRecord(ctx context.Context, zone, hostName, value string, ttl int) error {
 	change := DNSRecordChange{
-		Values:   value,
+		Values:   []string{value},
 		Type:     "TXT",
 		HostName: normalizeDNSName(hostName),
 		TTL:      ttl,

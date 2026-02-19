@@ -12,6 +12,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
+	"k8s.io/klog/v2"
 )
 
 const defaultTXTTTL = 300
@@ -40,17 +41,22 @@ func (e *wixSolver) Name() string {
 func (e *wixSolver) Present(ch *acme.ChallengeRequest) error {
 	zone, hostName, err := e.challengeTXTTarget(ch)
 	if err != nil {
+		klog.ErrorS(err, "Failed to determine TXT target for present", "namespace", ch.ResourceNamespace)
 		return err
 	}
+	klog.InfoS("Presenting ACME TXT record", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName)
 
 	client, ttl, err := e.clientFromChallengeConfig(ch)
 	if err != nil {
+		klog.ErrorS(err, "Failed to build Wix client for present", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName)
 		return err
 	}
 
 	if err := client.AddTXTRecord(context.Background(), zone, hostName, ch.Key, ttl); err != nil {
+		klog.ErrorS(err, "Failed to present ACME TXT record", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName, "ttl", ttl)
 		return fmt.Errorf("present TXT record for %q in zone %q: %w", hostName, zone, err)
 	}
+	klog.InfoS("Presented ACME TXT record", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName, "ttl", ttl)
 
 	return nil
 }
@@ -58,31 +64,39 @@ func (e *wixSolver) Present(ch *acme.ChallengeRequest) error {
 func (e *wixSolver) CleanUp(ch *acme.ChallengeRequest) error {
 	zone, hostName, err := e.challengeTXTTarget(ch)
 	if err != nil {
+		klog.ErrorS(err, "Failed to determine TXT target for cleanup", "namespace", ch.ResourceNamespace)
 		return err
 	}
+	klog.InfoS("Cleaning up ACME TXT record", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName)
 
 	client, ttl, err := e.clientFromChallengeConfig(ch)
 	if err != nil {
+		klog.ErrorS(err, "Failed to build Wix client for cleanup", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName)
 		return err
 	}
 
 	if err := client.DeleteTXTRecord(context.Background(), zone, hostName, ch.Key, ttl); err != nil {
+		klog.ErrorS(err, "Failed to clean up ACME TXT record", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName, "ttl", ttl)
 		return fmt.Errorf("cleanup TXT record for %q in zone %q: %w", hostName, zone, err)
 	}
+	klog.InfoS("Cleaned up ACME TXT record", "namespace", ch.ResourceNamespace, "zone", zone, "hostName", hostName, "ttl", ttl)
 
 	return nil
 }
 
 func (e *wixSolver) Initialize(kubeClientConfig *rest.Config, _ <-chan struct{}) error {
 	if kubeClientConfig == nil {
+		klog.Warningf("Initialize called with nil Kubernetes config; solver will fail until initialized with a valid config")
 		return nil
 	}
 
 	k8sClient, err := kubernetes.NewForConfig(kubeClientConfig)
 	if err != nil {
+		klog.ErrorS(err, "Failed to initialize Kubernetes client")
 		return err
 	}
 	e.client = k8sClient
+	klog.InfoS("Initialized Kubernetes client for Wix solver")
 
 	return nil
 }
@@ -94,6 +108,7 @@ func (e *wixSolver) clientFromChallengeConfig(ch *acme.ChallengeRequest) (*Clien
 
 	cfg, err := loadConfig(ch.Config)
 	if err != nil {
+		klog.ErrorS(err, "Failed to decode solver config", "namespace", ch.ResourceNamespace)
 		return nil, 0, err
 	}
 
@@ -115,11 +130,13 @@ func (e *wixSolver) clientFromChallengeConfig(ch *acme.ChallengeRequest) (*Clien
 
 	client, err := NewClient(accountID, authHeader, opts...)
 	if err != nil {
+		klog.ErrorS(err, "Failed to construct Wix API client", "namespace", ch.ResourceNamespace)
 		return nil, 0, err
 	}
 
 	ttl := cfg.TTL
 	if ttl <= 0 {
+		klog.Warningf("Solver TTL is not set or invalid (%d); using default TTL %d", cfg.TTL, defaultTXTTTL)
 		ttl = defaultTXTTTL
 	}
 
@@ -136,6 +153,7 @@ func (e *wixSolver) secretValue(namespace string, ref secretKeyRef) (string, err
 
 	sec, err := e.client.CoreV1().Secrets(namespace).Get(context.Background(), ref.Name, metav1.GetOptions{})
 	if err != nil {
+		klog.ErrorS(err, "Failed to read secret", "namespace", namespace, "secretName", ref.Name)
 		return "", err
 	}
 
