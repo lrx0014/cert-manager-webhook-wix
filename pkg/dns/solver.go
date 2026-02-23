@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/cert-manager/cert-manager/pkg/acme/webhook"
@@ -16,6 +17,8 @@ import (
 )
 
 const defaultTXTTTL = 300
+
+var debugMode = false
 
 type wixSolver struct {
 	name   string
@@ -213,5 +216,14 @@ func New(name string) webhook.Solver {
 		// by default
 		name = "wix"
 	}
+
+	debugMode = strings.EqualFold(strings.TrimSpace(os.Getenv("LOG_LEVEL")), "DEBUG")
+
 	return &wixSolver{name: name}
+}
+
+func Debug(msg string, keysAndValues ...any) {
+	if debugMode {
+		klog.InfoS(msg, keysAndValues...)
+	}
 }

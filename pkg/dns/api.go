@@ -10,8 +10,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
-	"k8s.io/klog/v2"
 )
 
 const defaultWixAPIBaseURL = "https://www.wixapis.com"
@@ -109,7 +107,7 @@ func (c *Client) PatchDNSZone(ctx context.Context, domainName string, additions,
 	req.Header.Set("wix-account-id", c.accountID)
 	req.Header.Set("Authorization", c.authHeader)
 
-	klog.V(4).InfoS(
+	Debug(
 		"Wix API request",
 		"method", req.Method,
 		"url", req.URL.String(),
@@ -129,7 +127,7 @@ func (c *Client) PatchDNSZone(ctx context.Context, domainName string, additions,
 	}
 	respBodyText := strings.TrimSpace(string(respBody))
 
-	klog.V(4).InfoS(
+	Debug(
 		"Wix API response",
 		"method", req.Method,
 		"url", req.URL.String(),
