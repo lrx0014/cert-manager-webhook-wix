@@ -47,6 +47,26 @@ To uninstall the webhook:
 helm uninstall --namespace cert-manager cert-manager-webhook-wix
 ```
 
+### Credentials
+
+In order to access the Wix API, the webhook needs an API token.
+
+- https://manage.wix.com/account/api-keys
+
+The secret for the example above will look like this:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wix-api-token
+  namespace: cert-manager
+type: Opaque
+data:
+  account-id: <your-account-id>
+  authorization: <your-auth-key>
+```
+
 ## Issuer
 
 Create a `ClusterIssuer` or `Issuer` resource as following:
@@ -83,26 +103,6 @@ spec:
                 key: authorization
             groupName: wix.cert-manager-webhook.lrx0014.github.com
             solverName: wix
-```
-
-### Credentials
-
-In order to access the Wix API, the webhook needs an API token.
-
-- https://manage.wix.com/account/api-keys
-
-The secret for the example above will look like this:
-
-```yaml
-apiVersion: v1
-kind: Secret
-metadata:
-  name: wix-api-token
-  namespace: cert-manager
-type: Opaque
-data:
-  account-id: <your-account-id>
-  authorization: <your-auth-key>
 ```
 
 ### Create a certificate
@@ -143,7 +143,7 @@ You can then run the test suite with:
 
 - TODO
 
-## Creating new package
+## Creating new docker image and helm package
 
 To build new Docker image and push it to ghcr.io, here is a github action manifest:
 
